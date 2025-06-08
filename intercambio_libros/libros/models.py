@@ -11,7 +11,7 @@ class Libro(models.Model):
     titulo = models.CharField(max_length=255)
     autor = models.CharField(max_length=255)
     genero = models.CharField(max_length=100)
-    estado = models.CharField(max_length=50)  # "Nuevo", "Usado - Buen estado", etc.
+    estado = models.CharField(max_length=50) 
     propietario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name="libros")
     def __str__(self):
         return {self.titulo}
