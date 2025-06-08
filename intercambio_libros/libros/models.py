@@ -11,10 +11,9 @@ class Libro(models.Model):
     titulo = models.CharField(max_length=255)
     autor = models.CharField(max_length=255)
     genero = models.CharField(max_length=100)
-    estado = models.CharField(max_length=50)  # "Nuevo", "Usado - Buen estado", etc.
+    estado = models.CharField(max_length=50) 
     propietario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name="libros")
-    def __str__(self):
-        return {self.titulo}
+
 
 class Intercambio(models.Model):
     solicitante = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name="solicitudes")
@@ -27,6 +26,4 @@ class Historial(models.Model):
     libro = models.ForeignKey(Libro, on_delete=models.CASCADE)
     fecha_intercambio = models.DateTimeField(auto_now_add=True)
     comentario = models.TextField(null=True, blank=True)
-    def __str__(self):
-        return {self.usuario.username}
 
