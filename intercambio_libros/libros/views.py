@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from .forms import RegistroUsuarioForm
@@ -15,14 +15,10 @@ def registro_view(request):
         form = RegistroUsuarioForm()
     return render(request, 'registro.html', {'form': form})
 
-
-=======
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseForbidden
 from .models import Libro, Intercambio, Usuario
 from .forms import IntercambioForm
-
->>>>>>> 030bc20e98e2dd6ffcf1dee5a782996df4ea2c2d
 
 def lista_libros(request):
     libros = Libro.objects.all()
