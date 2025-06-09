@@ -6,6 +6,9 @@ class Usuario(AbstractUser):
     telefono = models.CharField(max_length=15)
     groups = models.ManyToManyField(Group, related_name="usuario_groups")
     user_permissions = models.ManyToManyField(Permission, related_name="usuario_permissions")
+    
+    def __str__(self):
+        return self.user.username
 
 class Libro(models.Model):
     titulo = models.CharField(max_length=255)
