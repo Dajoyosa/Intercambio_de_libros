@@ -132,12 +132,12 @@ class Envio(models.Model):
     codigo_postal = models.CharField(max_length=20, blank=True, null=True)
     pais_destino = models.CharField(max_length=100, blank=True, null=True)
 
-    empresa_envio = models.CharField(max_length=100, blank=True, null=True)  # ej: DHL, UPS, etc.
-    numero_guia = models.CharField(max_length=100, blank=True, null=True)    # número de tracking
-    fecha_envio = models.DateField(blank=True, null=True)                    # fecha real del envío
+    empresa_envio = models.CharField(max_length=100, blank=True, null=True)  
+    numero_guia = models.CharField(max_length=100, blank=True, null=True)    
+    fecha_envio = models.DateField(blank=True, null=True)                    
 
-    recibido = models.BooleanField(default=False)                            # si ya se recibió
-    fecha_recepcion = models.DateField(blank=True, null=True)               # cuándo se recibió realmente
+    recibido = models.BooleanField(default=False)                            
+    fecha_recepcion = models.DateField(blank=True, null=True)               
 
     celular_contacto = models.CharField(max_length=20, blank=True, null=True)
     direccion_envio = models.TextField(blank=True, null=True)
