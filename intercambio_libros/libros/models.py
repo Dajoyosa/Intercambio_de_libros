@@ -86,7 +86,6 @@ class Intercambio(models.Model):
     )
     mensaje = models.TextField(blank=True, verbose_name=_("Mensaje"))
 
-    # Información de contacto adicional
     nombres_completos = models.CharField(max_length=200, blank=True, null=True)
     dni_contacto = models.CharField(max_length=20, blank=True, null=True)
     telefono_contacto = models.CharField(max_length=20, blank=True, null=True)
@@ -123,6 +122,36 @@ class Comentario(models.Model):
 
     def __str__(self):
         return f"Comentario de {self.autor} en {self.libro}"
+
+
+class Envio(models.Model):
+
+    intercambio = models.OneToOneField('Intercambio', on_delete=models.CASCADE)
+
+    direccion = models.CharField(max_length=255, blank=True, null=True)
+    ciudad = models.CharField(max_length=100, blank=True, null=True)
+    codigo_postal = models.CharField(max_length=20, blank=True, null=True)
+    pais_destino = models.CharField(max_length=100, blank=True, null=True)
+
+    empresa_envio = models.CharField(max_length=100, blank=True, null=True)  # ej: DHL, UPS, etc.
+    numero_guia = models.CharField(max_length=100, blank=True, null=True)    # número de tracking
+    fecha_envio = models.DateField(blank=True, null=True)                    # fecha real del envío
+
+    recibido = models.BooleanField(default=False)                            # si ya se recibió
+    fecha_recepcion = models.DateField(blank=True, null=True)               # cuándo se recibió realmente
+
+    celular_contacto = models.CharField(max_length=20, blank=True, null=True)
+    direccion_envio = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return f'Envío del intercambio {self.intercambio.id}'
+
+
+
+
+
+
+
 
 
 
