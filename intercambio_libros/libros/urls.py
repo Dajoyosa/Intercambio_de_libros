@@ -4,8 +4,12 @@ from django.conf import settings
 from django.conf.urls.static import static
 from Libro import views
 
+
 urlpatterns = [
-    path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
-    path('registro/', views.registro_view, name='registro'),
-]
+        path('admin/', admin.site.urls),
+    path('', include('django.contrib.auth.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('', views.inicio, name='inicio'),
+    path('registro/', views.registro, name='registro'),
+    path('libros/', include('Libro.urls')),
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
