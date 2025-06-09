@@ -1,0 +1,8 @@
+# Ignorar entornos virtuales (nombres comunes)
+env/
+venv/
+ENV/
+.venv/
+.virtualenv/
+
+
