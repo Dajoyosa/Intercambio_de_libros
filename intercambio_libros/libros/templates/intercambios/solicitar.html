@@ -1,0 +1,91 @@
+{# 
+    Plantilla: solicitar_intercambio.html
+    Descripción: Muestra el formulario que un usuario debe llenar para solicitar un intercambio por un libro.
+    Incluye datos de contacto y un mensaje personalizado.
+#}
+
+{% extends 'base.html' %}  {# Hereda el diseño general de la plantilla base del sitio #}
+{% load static %}          {# Permite el uso de archivos estáticos (CSS, JS, imágenes, etc.) #}
+{% load form_tags %}       {# Carga un filtro personalizado para aplicar clases a los campos del formulario #}
+
+{% block content %}
+<div class="container mt-5 d-flex justify-content-center">
+    <div class="card shadow" style="max-width: 600px; width: 100%;">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Solicitar Intercambio</h5>
+        </div>
+        <div class="card-body">
+
+            {# Si hay errores en el formulario, muestra un mensaje de alerta #}
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    <strong>⚠️ Por favor, llena los campos y/o corrige los errores antes de enviar la solicitud.</strong>
+                </div>
+            {% endif %}
+
+            {# Formulario de solicitud de intercambio #}
+            <form method="post" novalidate>
+                {% csrf_token %}  {# Token de seguridad CSRF para evitar ataques de falsificación #}
+                {{ form.non_field_errors }}  {# Muestra errores generales del formulario que no pertenecen a un campo específico #}
+
+                {# Campo: mensaje personalizado del usuario solicitante #}
+                <div class="mb-3">
+                    {{ form.mensaje.label_tag }}  
+                    {{ form.mensaje|add_class:"form-control" }}
+                </div>
+
+                {# Campo: nombres completos del solicitante #}
+                <div class="mb-3">
+                    {{ form.nombres_completos.label_tag }}  
+                    {{ form.nombres_completos|add_class:"form-control" }}
+                </div>
+
+                {# Campo: DNI del contacto (identificación) #}
+                <div class="mb-3">
+                    {{ form.dni_contacto.label_tag }}  
+                    {{ form.dni_contacto|add_class:"form-control" }}
+                </div>
+
+                {# Campo: teléfono del contacto #}
+                <div class="mb-3">
+                    {{ form.telefono_contacto.label_tag }}  
+                    {{ form.telefono_contacto|add_class:"form-control" }}
+                </div>
+
+                {# Campo: dirección de contacto #}
+                <div class="mb-3">
+                    {{ form.direccion_contacto.label_tag }}  
+                    {{ form.direccion_contacto|add_class:"form-control" }}
+                </div>
+
+                {# Campo: código postal del contacto #}
+                <div class="mb-3">
+                    {{ form.codigo_postal_contacto.label_tag }}  
+                    {{ form.codigo_postal_contacto|add_class:"form-control" }}
+                </div>
+
+                {# Campo: país de contacto #}
+                <div class="mb-3">
+                    {{ form.pais_contacto.label_tag }}  
+                    {{ form.pais_contacto|add_class:"form-control" }}
+                </div>
+
+                {# Botón de envío del formulario #}
+                <button type="submit" class="btn btn-success w-100">
+                    <small>📩 Enviar solicitud</small>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{# Enlace para volver al inicio del sitio #}
+<div class="text-center mt-3">
+    <a href="{% url 'inicio' %}" class="btn btn-outline-secondary btn-sm">← Volver al inicio</a>
+</div>
+{% endblock %}
+
+{# 
+    Fin de la plantilla 'solicitar_intercambio.html'.
+    Esta página permite a los usuarios enviar una solicitud de intercambio incluyendo sus datos personales.
+#}

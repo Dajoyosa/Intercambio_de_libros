@@ -6,6 +6,15 @@
     
     <h2 class="mb-4">Iniciar Sesión</h2>
 
+
+{% extends 'base.html' %} 
+{% block title %}Iniciar Sesión{% endblock %}  
+{% block content %}
+<div class="container mt-5">
+    
+
+    <h2 class="mb-4">Iniciar Sesión</h2>
+
     {% if form.errors %}
         <div class="alert alert-danger">
             Por favor, revisa tu nombre de usuario y contraseña.
@@ -16,6 +25,17 @@
         {{ form.as_p }}    
         <button type="submit" class="btn btn-primary">Ingresar</button>
     </form>
+
+
+    {# Formulario de inicio de sesión #}
+    <form method="post">
+        {% csrf_token %}  {# Protección contra ataques CSRF #}
+        {{ form.as_p }}    {# Renderiza los campos del formulario como párrafos #}
+        <button type="submit" class="btn btn-primary">Ingresar</button>
+    </form>
+
+    {# Enlace para registrar una nueva cuenta #}
+
     <p class="mt-3">
         ¿No tienes cuenta? <a href="{% url 'registro' %}">Regístrate aquí</a>.
     </p>
