@@ -1,0 +1,145 @@
+<!-- # INICIO DE LA PLANTILLA BASE -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% load static %} <!-- # INICIO Carga de archivos estáticos -->
+    {% load dict_utils %} <!-- # FIN Carga de funciones personalizadas -->
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- # INICIO Bloque de título de página -->
+    <title>{% block title %}Intercambio de Libros{% endblock %}</title>
+    <!-- # FIN Bloque de título de página -->
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- CSS personalizado -->
+    <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+
+    <!-- # INICIO Bloque para CSS adicional -->
+    {% block extra_css %}{% endblock %}
+    <!-- # FIN Bloque para CSS adicional -->
+</head>
+<body>
+    <!-- # INICIO Barra de navegación -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'inicio' %}">
+                <i class="fas fa-book-exchange me-2"></i>IntercambioLibros
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'inicio' %}">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'listar_libros' %}">Libros Disponibles</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'mis_libros' %}">Mis Libros</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'mis_intercambios' %}">Mis Intercambios</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <!-- # INICIO Validación de usuario autenticado -->
+                    {% if user.is_authenticated %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user-circle me-1"></i>{{ user.username }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="{% url 'perfil_usuario' %}">Mi Perfil</a></li>
+                                <li><a class="dropdown-item" href="{% url 'mis_libros' %}">Mis Libros</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{% url 'logout' %}">Cerrar Sesión</a></li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'login' %}">Iniciar Sesión</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'registro' %}">Registrarse</a>
+                        </li>
+                    {% endif %}
+                    <!-- # FIN Validación de usuario autenticado -->
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- # FIN Barra de navegación -->
+
+    <!-- # INICIO Contenido principal -->
+    <main class="container my-4">
+        <!-- # INICIO Mostrar mensajes de Django -->
+        {% if messages %}
+        <div class="mt-3">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        <!-- # FIN Mostrar mensajes de Django -->
+
+        <!-- # INICIO Bloque de contenido dinámico -->
+        {% block content %}{% endblock %}
+        <!-- # FIN Bloque de contenido dinámico -->
+    </main>
+    <!-- # FIN Contenido principal -->
+
+    <!-- # INICIO Pie de página -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>Sobre Nosotros</h5>
+                    <p>Plataforma de intercambio de libros donde los amantes de la lectura pueden compartir sus libros favoritos.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Enlaces Rápidos</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'inicio' %}" class="text-white">Inicio</a></li>
+                        <li><a href="{% url 'listar_libros' %}" class="text-white">Libros Disponibles</a></li>
+                        <li><a href="#" class="text-white">Términos y Condiciones</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Contacto</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-envelope me-2"></i> contacto@intercambiolibros.com</li>
+                        <li><i class="fas fa-phone me-2"></i> +591 73029852</li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="my-4 bg-light">
+            <div class="text-center">
+                <p class="mb-0">&copy; 2025 IntercambioLibros. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+    <!-- # FIN Pie de página -->
+
+    <!-- # INICIO Scripts JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+
+    <!-- # INICIO Bloque para JS adicional -->
+    {% block extra_js %}{% endblock %}
+    <!-- # FIN Bloque para JS adicional -->
+    <!-- # FIN Scripts JS -->
+</body>
+</html>
+<!-- # FIN DE LA PLANTILLA BASE -->
