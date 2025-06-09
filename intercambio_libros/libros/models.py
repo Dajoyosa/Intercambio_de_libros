@@ -54,7 +54,6 @@ class Libro(models.Model):
         return f"{self.titulo} - {self.autor}"
 
 
-
 class Intercambio(models.Model):
 
     TIPO_ESTADO = [
@@ -146,34 +145,4 @@ class Envio(models.Model):
     def __str__(self):
         return f'Envío del intercambio {self.intercambio.id}'
 
-
-
-
-
-
-
-
-
-
-
-
-class Libro(models.Model):
-    titulo = models.CharField(max_length=255)
-    autor = models.CharField(max_length=255)
-    genero = models.CharField(max_length=100)
-    estado = models.CharField(max_length=50) 
-    propietario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name="libros")
-
-
-class Intercambio(models.Model):
-    solicitante = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name="solicitudes")
-    propietario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name="ofertas")
-    libro_solicitado = models.ForeignKey(Libro, on_delete=models.CASCADE, related_name="intercambios")
-    estado = models.CharField(max_length=20, choices=[("Pendiente", "Pendiente"), ("Aceptado", "Aceptado"), ("Rechazado", "Rechazado")])
-
-class Historial(models.Model):
-    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-    libro = models.ForeignKey(Libro, on_delete=models.CASCADE)
-    fecha_intercambio = models.DateTimeField(auto_now_add=True)
-    comentario = models.TextField(null=True, blank=True)
 
