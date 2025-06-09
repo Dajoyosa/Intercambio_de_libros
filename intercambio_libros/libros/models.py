@@ -55,6 +55,52 @@ class Libro(models.Model):
 
 
 
+class Intercambio(models.Model):
+
+    TIPO_ESTADO = [
+        ('pendiente', 'Pendiente'),
+        ('aceptado', 'Aceptado'),
+        ('rechazado', 'Rechazado'),
+        ('completado', 'Completado'),
+    ]
+
+    libro = models.ForeignKey(
+        Libro,
+        on_delete=models.CASCADE,
+        related_name='intercambios',
+        verbose_name=_("Libro")
+    )
+    solicitante = models.ForeignKey(
+        Usuario,
+        on_delete=models.CASCADE,
+        related_name='solicitudes',
+        verbose_name=_("Solicitante")
+    )
+    fecha_solicitud = models.DateTimeField(auto_now_add=True, verbose_name=_("Fecha de solicitud"))
+    fecha_intercambio = models.DateTimeField(blank=True, null=True, verbose_name=_("Fecha de intercambio"))
+    estado = models.CharField(
+        max_length=20,
+        choices=TIPO_ESTADO,
+        default='pendiente',
+        verbose_name=_("Estado")
+    )
+    mensaje = models.TextField(blank=True, verbose_name=_("Mensaje"))
+
+    # Información de contacto adicional
+    nombres_completos = models.CharField(max_length=200, blank=True, null=True)
+    dni_contacto = models.CharField(max_length=20, blank=True, null=True)
+    telefono_contacto = models.CharField(max_length=20, blank=True, null=True)
+    direccion_contacto = models.CharField(max_length=255, blank=True, null=True)
+    codigo_postal_contacto = models.CharField(max_length=20, blank=True, null=True)
+    pais_contacto = models.CharField(max_length=100, blank=True, null=True)
+
+    class Meta:
+        verbose_name = _("Intercambio")
+        verbose_name_plural = _("Intercambios")
+        ordering = ['-fecha_solicitud']
+
+    def __str__(self):
+        return f"Intercambio de {self.libro} - {self.solicitante}"
 
 
 
