@@ -1,6 +1,18 @@
-<h2>Registro</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Registrarse</button>
-</form>
+{% extends 'base.html' %}
+
+{% block title %}Registro{% endblock %}
+
+{% block content %}
+
+    <div class="container mt-5">
+        <h2 class="mb-4">Registro de Usuario</h2>
+
+        <form method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Registrarse</button>
+        </form>
+      
+    </div>
+  
+{% endblock %}
