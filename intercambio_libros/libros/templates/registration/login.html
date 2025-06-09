@@ -1,0 +1,42 @@
+{# 
+    Plantilla: login.html
+    Funcionalidad: Página para que los usuarios inicien sesión en la plataforma.
+    Incluye manejo de errores, protección CSRF y enlace al registro.
+#}
+
+{% extends 'base.html' %}  {# Hereda la estructura general del sitio web #}
+
+{% block title %}Iniciar Sesión{% endblock %}  {# Título que se muestra en la pestaña del navegador #}
+
+{% block content %}
+<div class="container mt-5">
+    
+    {# Título principal de la página #}
+    <h2 class="mb-4">Iniciar Sesión</h2>
+
+    {# Muestra una alerta si hay errores en el formulario (por ejemplo, credenciales inválidas) #}
+    {% if form.errors %}
+        <div class="alert alert-danger">
+            Por favor, revisa tu nombre de usuario y contraseña.
+        </div>
+    {% endif %}
+
+    {# Formulario de inicio de sesión #}
+    <form method="post">
+        {% csrf_token %}  {# Protección contra ataques CSRF #}
+        {{ form.as_p }}    {# Renderiza los campos del formulario como párrafos #}
+        <button type="submit" class="btn btn-primary">Ingresar</button>
+    </form>
+
+    {# Enlace para registrar una nueva cuenta #}
+    <p class="mt-3">
+        ¿No tienes cuenta? <a href="{% url 'registro' %}">Regístrate aquí</a>.
+    </p>
+</div>
+{% endblock %}
+
+{# 
+    Fin del archivo login.html.
+    Esta plantilla está diseñada para que los usuarios accedan con sus credenciales.
+#}
+

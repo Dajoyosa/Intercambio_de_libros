@@ -1,0 +1,53 @@
+{# 
+    Plantilla: mis_libros.html
+    Funcionalidad: Muestra los libros que el usuario actual ha agregado a la plataforma.
+    Permite ver detalles y eliminar libros propios.
+#}
+
+{% extends 'base.html' %}  {# Hereda la estructura base del sitio #}
+
+{% block title %}Mis Libros{% endblock %}  {# Título de la pestaña del navegador #}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Mis Libros</h2>  {# Encabezado principal de la página #}
+
+    {# Verifica si el usuario tiene libros agregados #}
+    {% if libros %}
+        <div class="row">
+            {# Recorre todos los libros del usuario y los muestra como tarjetas (cards) #}
+            {% for libro in libros %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+
+                        {# Muestra la imagen (portada) del libro si existe #}
+                        {% if libro.imagen %}
+                            <img src="{{ libro.imagen.url }}" class="card-img-top" alt="{{ libro.titulo }}">
+                        {% endif %}
+
+                        <div class="card-body">
+                            <h5 class="card-title">{{ libro.titulo }}</h5>  {# Muestra el título del libro #}
+                            <p class="card-text">{{ libro.autor }}</p>       {# Muestra el autor del libro #}
+
+                            {# Botón para ver detalles del libro #}
+                            <a href="{% url 'detalle_libro' libro.pk %}" class="btn btn-sm btn-info">Ver detalles</a>
+
+                            {# Botón para eliminar el libro (redirige a una vista de confirmación) #}
+                            <a href="{% url 'eliminar_libro' libro.id %}" class="btn btn-sm btn-danger ms-2">Eliminar</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        {# Si el usuario no tiene libros, muestra un mensaje de aviso #}
+        <p>No has agregado libros todavía.</p>
+    {% endif %}
+</div>
+{% endblock %}
+
+{# 
+    Fin del archivo mis_libros.html.
+    Esta plantilla se utiliza para que el usuario administre sus propios libros.
+#}
+
