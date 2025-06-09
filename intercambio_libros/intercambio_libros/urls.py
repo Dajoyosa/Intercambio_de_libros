@@ -2,7 +2,9 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from Libro import views
+from . import views
+from intercambio_libros.libros.models import Libro
+
 
 
 urlpatterns = [
