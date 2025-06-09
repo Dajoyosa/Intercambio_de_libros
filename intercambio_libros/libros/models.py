@@ -104,7 +104,25 @@ class Intercambio(models.Model):
 
 
 
+class Comentario(models.Model):
 
+    libro = models.ForeignKey(
+        Libro,
+        on_delete=models.CASCADE,
+        related_name='comentarios',
+        verbose_name=_("Libro")
+    )
+    autor = models.ForeignKey(Usuario, on_delete=models.CASCADE, verbose_name=_("Autor"))
+    contenido = models.TextField(verbose_name=_("Contenido"))
+    fecha_creacion = models.DateTimeField(auto_now_add=True, verbose_name=_("Fecha de creación"))
+
+    class Meta:
+        verbose_name = _("Comentario")
+        verbose_name_plural = _("Comentarios")
+        ordering = ['-fecha_creacion']
+
+    def __str__(self):
+        return f"Comentario de {self.autor} en {self.libro}"
 
 
 
