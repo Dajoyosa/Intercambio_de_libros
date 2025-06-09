@@ -4,13 +4,15 @@ from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 
 class Usuario(AbstractUser):
-    direccion = models.CharField(max_length=255)
-    telefono = models.CharField(max_length=15)
-    groups = models.ManyToManyField(Group, related_name="usuario_groups")
-    user_permissions = models.ManyToManyField(Permission, related_name="usuario_permissions")
+    ciudad = models.CharField(max_length=100)
+    direccion = models.CharField(max_length=200)
+    telefono = models.CharField(max_length=20)
+    foto_perfil = models.ImageField(upload_to='usuarios/', null=True, blank=True)
+    pais = models.CharField(max_length=100, blank=True, null=True)
+    biografia = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return self.direccion
+        return self.username
 
 class Libro(models.Model):
     titulo = models.CharField(max_length=255)
