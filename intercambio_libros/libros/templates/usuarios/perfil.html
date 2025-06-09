@@ -1,0 +1,25 @@
+
+{% extends 'base.html' %} 
+
+{% block title %}Mi Perfil{% endblock %} 
+
+{% block content %}
+<div class="container mt-5">
+
+    <h2>Mi Perfil</h2>
+
+    <ul class="list-group">
+        <li class="list-group-item">
+            <strong>Nombre de usuario:</strong> {{ usuario.username }}
+        </li>
+        <li class="list-group-item">
+            <strong>Nombre completo:</strong> {{ usuario.first_name }} {{ usuario.last_name }}
+        </li>
+        <li class="list-group-item">
+            <strong>Email:</strong> {{ usuario.email }}
+        </li>
+    </ul>
+
+</div>
+{% endblock %}
+
