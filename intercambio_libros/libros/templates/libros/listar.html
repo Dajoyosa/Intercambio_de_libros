@@ -1,0 +1,68 @@
+{# 
+    Plantilla: libros_disponibles.html
+    Funcionalidad: Muestra una galería de libros disponibles para intercambio.
+    Incluye portada, título, descripción breve, estado de disponibilidad y paginación.
+#}
+
+{% extends 'base.html' %}  {# Hereda la estructura y estilos comunes definidos en base.html #}
+
+{% block title %}Libros Disponibles{% endblock %}  {# Define el título de la pestaña del navegador #}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Libros Disponibles</h2>  {# Encabezado de la sección principal #}
+
+    <div class="row">
+        {# Recorre cada libro enviado desde la vista y lo muestra como una tarjeta (card) #}
+        {% for libro in libros %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow">
+                    
+                    {# Muestra la portada del libro o una imagen por defecto si no hay portada cargada #}
+                    {% if libro.portada %}
+                        <img src="{{ libro.portada.url }}" class="card-img-top" alt="Portada de {{ libro.titulo }}">
+                    {% else %}
+                        <img src="https://via.placeholder.com/200x300?text=Sin+Portada" class="card-img-top" alt="Sin portada">
+                    {% endif %}
+
+                    <div class="card-body">
+                        <h5 class="card-title">{{ libro.titulo }}</h5>  {# Muestra el título del libro #}
+
+                        {# Muestra una descripción corta (15 palabras) del libro #}
+                        <p class="card-text">{{ libro.descripcion|truncatewords:15 }}</p>
+
+                        {# Verifica si el libro está en proceso de intercambio para mostrar un mensaje o botón #}
+                        {% if libro.id in libros_en_proceso_ids %}
+                            <span class="badge bg-warning text-dark">En proceso de intercambio</span><br><br>
+                            <button class="btn btn-secondary btn-sm" disabled>No disponible</button>
+                        {% else %}
+                            <a href="{% url 'detalle_libro' libro.pk %}" class="btn btn-primary btn-sm">Ver detalles</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            {# Si no hay libros en la base de datos, se muestra este mensaje #}
+            <p class="text-muted">No hay libros disponibles por el momento.</p>
+        {% endfor %}
+    </div>
+
+    {# Controles de paginación: anterior, número actual, siguiente #}
+    <div class="mt-4">
+        {% if libros.has_previous %}
+            <a href="?page={{ libros.previous_page_number }}" class="btn btn-secondary btn-sm">Anterior</a>
+        {% endif %}
+
+        <span>Página {{ libros.number }} de {{ libros.paginator.num_pages }}</span>
+
+        {% if libros.has_next %}
+            <a href="?page={{ libros.next_page_number }}" class="btn btn-secondary btn-sm">Siguiente</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{# 
+    Fin del archivo libros_disponibles.html.
+    Esta plantilla es clave para la visualización pública de libros en la plataforma.
+#}

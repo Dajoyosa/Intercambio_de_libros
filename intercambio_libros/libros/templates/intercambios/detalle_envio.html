@@ -1,0 +1,190 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load form_tags %}
+
+#-------- Inicio del contenido principal --------
+{% block content %}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+
+                #-------- Título principal --------
+                <h2 class="mb-4 text-center">📦 Gestión del Envío</h2>
+                #-------- Fin título --------
+
+                #-------- Datos del solicitante --------
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-header bg-info text-white">
+                        <strong>🧍 Datos del Solicitante</strong>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Nombre:</strong> {{ envio.intercambio.nombres_completos }}</p>
+                        <p><strong>Teléfono:</strong> {{ envio.intercambio.telefono_contacto }}</p>
+                        <p><strong>Dirección:</strong> {{ envio.intercambio.direccion_contacto }}</p>
+                        <p><strong>Código Postal:</strong> {{ envio.intercambio.codigo_postal_contacto|default:"-" }}</p>
+                        <p><strong>País:</strong> {{ envio.intercambio.pais_contacto }}</p>
+                        <p><strong>Nro. de Identificación:</strong> {{ envio.intercambio.dni_contacto }}</p>
+                    </div>
+                </div>
+                #-------- Fin datos del solicitante --------
+
+                <div class="row">
+                    #-------- Columna izquierda: Información del envío --------
+                    <div class="col-md-6">
+                        <div class="card shadow-sm">
+                            <div class="card-header bg-secondary text-white">
+                                <strong>🚚 Información del Envío</strong>
+                            </div>
+                            <div class="card-body">
+                                {% if user == intercambio.libro.propietario %}
+                                    #-------- Formulario para editar envío --------
+                                    <form method="post" novalidate class="needs-validation">
+                                        {% csrf_token %}
+                                        {{ form.non_field_errors }}
+
+                                        <div class="mb-3">
+                                            {{ form.direccion_envio.label_tag }}
+                                            {{ form.direccion_envio|add_class:"form-control" }}
+                                        </div>
+                                        <div class="mb-3">
+                                            {{ form.pais_destino.label_tag }}
+                                            {{ form.pais_destino|add_class:"form-control" }}
+                                        </div>
+                                        <div class="mb-3">
+                                            {{ form.ciudad.label_tag }}
+                                            {{ form.ciudad|add_class:"form-control" }}
+                                        </div>
+                                        <div class="mb-3">
+                                            {{ form.codigo_postal.label_tag }}
+                                            {{ form.codigo_postal|add_class:"form-control" }}
+                                        </div>
+                                        <div class="mb-3">
+                                            {{ form.empresa_envio.label_tag }}
+                                            {{ form.empresa_envio|add_class:"form-control" }}
+                                        </div>
+                                        <div class="mb-3">
+                                            {{ form.numero_guia.label_tag }}
+                                            {{ form.numero_guia|add_class:"form-control" }}
+                                        </div>
+                                        <div class="mb-3">
+                                            {{ form.fecha_envio.label_tag }}
+                                            {{ form.fecha_envio|add_class:"form-control" }}
+                                        </div>
+                                        {{ form.recibido }}
+
+                                        <button type="submit" class="btn btn-primary w-100">📤 Guardar Envío</button>
+                                    </form>
+                                    #-------- Fin formulario envío --------
+                                {% else %}
+                                    #-------- Información del envío solo lectura --------
+                                    <p><strong>Dirección de Envío:</strong> {{ envio.direccion_envio|default:"-" }}</p>
+                                    <p><strong>País:</strong> {{ envio.pais_destino|default:"-" }}</p>
+                                    <p><strong>Ciudad:</strong> {{ envio.ciudad|default:"-" }}</p>
+                                    <p><strong>Código Postal:</strong> {{ envio.codigo_postal|default:"-" }}</p>
+                                    <p><strong>Empresa de Envío:</strong> {{ envio.empresa_envio|default:"-" }}</p>
+                                    <p><strong>Nro. de Guía:</strong> {{ envio.numero_guia|default:"-" }}</p>
+                                    <p><strong>Fecha de Envío:</strong> {{ envio.fecha_envio|date:"d/m/Y" }}</p>
+                                    #-------- Fin datos sólo lectura --------
+                                {% endif %}
+
+                                <hr>
+                                <p><strong>Estado del Intercambio:</strong>
+                                    {% if envio.estado_intercambio == 'completado' %}
+                                        <span class="text-success">Completado</span>
+                                    {% else %}
+                                        <span class="text-warning">En proceso</span>
+                                    {% endif %}
+                                </p>
+
+                                <p><strong>Recibido:</strong>
+                                    {% if envio.recibido %}
+                                        <span class="text-success">Sí</span>
+                                    {% else %}
+                                        <span class="text-danger">No</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    #-------- Fin columna izquierda --------
+
+                    #-------- Columna derecha: Carruseles de imágenes --------
+                    <div class="col-md-6">
+                        #-------- Primer carrusel --------
+                        <div id="carouselFotosEnvio" class="carousel slide shadow-sm mb-4" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="{% static 'images/carrusel_gestionar_inf1/carrusel01.jpg' %}" class="d-block w-100 rounded" alt="Libro 1">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="{% static 'images/carrusel_gestionar_inf1/carrusel02.jpg' %}" class="d-block w-100 rounded" alt="Libro 2">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="{% static 'images/carrusel_gestionar_inf1/carrusel03.jpg' %}" class="d-block w-100 rounded" alt="Libro 3">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="{% static 'images/carrusel_gestionar_inf1/carrusel04.jpg' %}" class="d-block w-100 rounded" alt="Libro 4">
+                                </div>
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselFotosEnvio" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Anterior</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselFotosEnvio" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Siguiente</span>
+                            </button>
+                        </div>
+                        #-------- Fin primer carrusel --------
+
+                        #-------- Segundo carrusel --------
+                        <div id="carouselFotosEnvio2" class="carousel slide shadow-sm" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="{% static 'images/carrusel_gestionar_inf2/carrusel01.jpg' %}" class="d-block w-100 rounded" alt="Libro 5">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="{% static 'images/carrusel_gestionar_inf2/carrusel02.jpg' %}" class="d-block w-100 rounded" alt="Libro 6">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="{% static 'images/carrusel_gestionar_inf2/carrusel03.jpg' %}" class="d-block w-100 rounded" alt="Libro 7">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="{% static 'images/carrusel_gestionar_inf2/carrusel04.jpg' %}" class="d-block w-100 rounded" alt="Libro 8">
+                                </div>
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselFotosEnvio2" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Anterior</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselFotosEnvio2" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Siguiente</span>
+                            </button>
+                        </div>
+                        #-------- Fin segundo carrusel --------
+                    </div>
+                    #-------- Fin columna derecha --------
+                </div>
+
+                #-------- Botón para marcar como recibido --------
+                {% if user == intercambio.solicitante and envio.direccion_envio and not envio.recibido %}
+                    <form method="post">
+                        {% csrf_token %}
+                        <button type="submit" name="marcar_recibido" class="btn btn-success w-100 mt-3">
+                            ✅ Marcar como Recibido
+                        </button>
+                    </form>
+                {% endif %}
+                #-------- Fin botón recibido --------
+
+                #-------- Botón volver --------
+                <a href="{% url 'mis_intercambios' %}" class="btn btn-outline-secondary mt-3 w-100">← Volver</a>
+                #-------- Fin botón volver --------
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+#-------- Fin del contenido principal --------
+

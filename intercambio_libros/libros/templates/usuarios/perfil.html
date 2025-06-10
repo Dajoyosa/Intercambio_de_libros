@@ -1,15 +1,19 @@
+{# 
+    Plantilla: perfil.html
+    Funcionalidad: Muestra la información del perfil del usuario autenticado.
+#}
 
-{% extends 'base.html' %} 
-{% block title %}Mi Perfil{% endblock %} 
-{% extends 'base.html' %}  
-{% block title %}Mi Perfil{% endblock %} 
+{% extends 'base.html' %}  {# Hereda la estructura principal del sitio #}
+
+{% block title %}Mi Perfil{% endblock %}  {# Título de la pestaña del navegador #}
 
 {% block content %}
 <div class="container mt-5">
 
+    {# Título de la sección de perfil #}
     <h2>Mi Perfil</h2>
-    <h2>Mi Perfil</h2>
-    
+
+    {# Lista de datos personales del usuario #}
     <ul class="list-group">
         <li class="list-group-item">
             <strong>Nombre de usuario:</strong> {{ usuario.username }}
@@ -24,4 +28,9 @@
 
 </div>
 {% endblock %}
+
+{# 
+    Fin del archivo perfil.html.
+    Esta plantilla es útil para que el usuario vea su información personal.
+#}
 

@@ -1,0 +1,88 @@
+{#
+    Plantilla: detalle_libro.html
+    Descripción: Muestra la información completa de un libro específico,
+    incluyendo portada, detalles, comentarios y posibilidad de solicitar un intercambio.
+#}
+
+{% extends 'base.html' %}  {# Hereda la estructura base del sitio (cabecera, pie de página, etc.) #}
+
+{% block title %}Detalle del Libro{% endblock %}  {# Título de la pestaña del navegador #}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Detalle del Libro</h2>
+
+    {# Tarjeta que contiene los datos del libro y su imagen de portada #}
+    <div class="card mb-4">
+        <div class="row g-0">
+            <div class="col-md-4">
+                {% if libro.portada %}
+                    {# Muestra la imagen de portada si existe #}
+                    <img src="{{ libro.portada.url }}" class="img-fluid rounded-start" alt="Portada del libro">
+                {% else %}
+                    {# Muestra una imagen por defecto si el libro no tiene portada #}
+                    <img src="https://via.placeholder.com/200x300?text=Sin+Portada" class="img-fluid rounded-start" alt="Sin portada">
+                {% endif %}
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    {# Detalles del libro #}
+                    <h5 class="card-title">{{ libro.titulo }}</h5>
+                    <p class="card-text"><strong>Autor:</strong> {{ libro.autor }}</p>
+                    <p class="card-text"><strong>Descripción:</strong> {{ libro.descripcion }}</p>
+                    <p class="card-text"><strong>Fecha de publicación:</strong> {{ libro.fecha_publicacion }}</p>
+                    <p class="card-text"><strong>Publicado por:</strong> {{ libro.propietario.username }}</p>
+
+                    {# Lógica para mostrar botón de solicitud de intercambio #}
+                    {% if user.is_authenticated and libro.propietario != user %}
+                        {% if not intercambio_existente %}
+                            <a href="{% url 'solicitar_intercambio' libro.id %}" class="btn btn-success mt-3">Solicitar Intercambio</a>
+                        {% else %}
+                            <p class="text-muted mt-3">Ya has solicitado el intercambio de este libro.</p>
+                        {% endif %}
+                    {% elif libro.propietario == user %}
+                        <p class="text-muted mt-3">Este libro es tuyo.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    {# Sección de comentarios sobre el libro #}
+    <h4>Comentarios</h4>
+    {% for comentario in comentarios %}
+        <div class="card mb-2">
+            <div class="card-body">
+                <p class="card-text">{{ comentario.texto }}</p>
+                <p class="card-text text-muted">
+                    <small>Por {{ comentario.autor.username }} el {{ comentario.fecha_creacion|date:"d M Y H:i" }}</small>
+                </p>
+            </div>
+        </div>
+    {% empty %}
+        <p>No hay comentarios aún.</p>
+    {% endfor %}
+
+    {# Formulario para agregar un nuevo comentario (solo si el usuario ha iniciado sesión) #}
+    {% if user.is_authenticated %}
+        <hr>
+        <h5>Agregar un comentario</h5>
+        <form method="POST">
+            {% csrf_token %}
+            {{ comentario_form.as_p }}  {# Renderiza el formulario como párrafos #}
+            <button type="submit" class="btn btn-primary">Enviar comentario</button>
+        </form>
+    {% else %}
+        <p><a href="{% url 'login' %}">Inicia sesión</a> para comentar.</p>
+    {% endif %}
+</div>
+{% endblock %}
+
+{# 
+    Fin de la plantilla 'detalle_libro.html'.
+    Incluye lógica condicional para intercambios y gestión de comentarios.
+#}
+
+

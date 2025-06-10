@@ -1,0 +1,54 @@
+{#
+    Plantilla: lista_libros.html
+    Descripción: Muestra todos los libros disponibles para intercambio.
+    Si un libro está en proceso de intercambio, muestra una etiqueta; si no, permite ver su detalle.
+#}
+
+{% extends 'base.html' %}  {# Hereda la estructura base del sitio #}
+{% load static %}  {# Carga archivos estáticos (como imágenes predeterminadas) #}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Libros Disponibles</h2>
+
+    <div class="row">
+        {# Itera sobre todos los libros disponibles enviados desde la vista #}
+        {% for libro in libros %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+
+                    {# Si el libro tiene una imagen, se muestra; si no, se muestra una imagen por defecto #}
+                    {% if libro.imagen %}
+                        <img src="{{ libro.imagen.url }}" class="card-img-top" alt="{{ libro.titulo }}">
+                    {% else %}
+                        <img src="{% static 'img/default_cover.jpg' %}" class="card-img-top" alt="Portada por defecto">
+                    {% endif %}
+
+                    <div class="card-body">
+                        <h5 class="card-title">{{ libro.titulo }}</h5>
+                        <p class="card-text">Autor: {{ libro.autor }}</p>
+                        <p class="card-text">Género: {{ libro.genero }}</p>
+
+                        {# Verifica si el libro está en proceso de intercambio #}
+                        {% if libro.id in libros_en_proceso_ids %}
+                            <span class="badge bg-warning text-dark">En proceso de intercambio</span>
+                        {% else %}
+                            {# Botón que lleva al detalle del libro si está disponible #}
+                            <a href="{% url 'detalle_libro' libro.id %}" class="btn btn-primary mt-2">Ver más</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            {# Si no hay libros en la base de datos, se muestra este mensaje #}
+            <p>No hay libros disponibles en este momento.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{# 
+    Fin de la plantilla lista_libros.html.
+    Esta vista permite a los usuarios explorar los libros listados para intercambio.
+#}
+

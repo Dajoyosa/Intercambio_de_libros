@@ -1,0 +1,116 @@
+{# 
+    Plantilla: mis_intercambios.html
+    Descripción: Muestra los intercambios realizados por el usuario logueado,
+    tanto como solicitante como propietario de libros. Permite ver estados,
+    gestionar envíos y aceptar/rechazar solicitudes.
+#}
+
+{% extends 'base.html' %}  {# Extiende la plantilla base general del sitio #}
+{% load static %}         {# Carga los archivos estáticos como CSS o imágenes si se necesitan #}
+{% load dict_utils %}     {# Carga un filtro personalizado llamado 'dict_utils' que permite acceder a diccionarios desde el template #}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Título principal de la página -->
+    <h2>Mis Intercambios</h2>
+
+    <!-- Sección 1: Intercambios en los que el usuario es el solicitante -->
+    <h4>Como Solicitante</h4>
+    {% if intercambios_solicitante %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Libro</th>
+                    <th>Propietario</th>
+                    <th>Estado</th>
+                    <th>Fecha</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for intercambio in intercambios_solicitante %}
+                    <tr>
+                        <td>{{ intercambio.libro.titulo }}</td>
+                        <td>{{ intercambio.libro.propietario.username }}</td>
+                        <td>{{ intercambio.estado }}</td>
+                        <td>{{ intercambio.fecha_solicitud|date:"d/m/Y H:i" }}</td>
+                        <td>
+                            {# Si el intercambio fue aceptado o completado, mostrar enlace para gestionar el envío #}
+                            {% if intercambio.estado == 'aceptado' or intercambio.estado == 'completado' %}
+                                {% with envio=envios|dict_get:intercambio.id %}
+                                    <a href="{% url 'gestionar_envio' intercambio.id %}" class="btn btn-sm btn-info">
+                                        {% if envio and envio.recibido %}
+                                            Ver Envío
+                                        {% else %}
+                                            Gestionar Envío
+                                        {% endif %}
+                                    </a>
+                                {% endwith %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <!-- Mensaje si el usuario no ha solicitado ningún intercambio -->
+        <p>No has solicitado ningún intercambio.</p>
+    {% endif %}
+
+    <!-- Sección 2: Intercambios en los que el usuario es el propietario del libro solicitado -->
+    <h4 class="mt-5">Como Propietario</h4>
+    {% if intercambios_propietario %}
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Libro</th>
+                    <th>Solicitante</th>
+                    <th>Estado</th>
+                    <th>Fecha</th>
+                    <th>Acciones</th>
+                    <th>Mensaje</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for intercambio in intercambios_propietario %}
+                    <tr>
+                        <td>{{ intercambio.libro.titulo }}</td>
+                        <td>{{ intercambio.solicitante.username }}</td>
+                        <td>
+                            {{ intercambio.estado }}
+                            {% if intercambio.estado == 'pendiente' %}
+                                <!-- Botones para aceptar o rechazar una solicitud pendiente -->
+                                <div class="mt-2">
+                                    <a href="{% url 'gestionar_intercambio' intercambio.id 'aceptar' %}" class="btn btn-sm btn-success">Aceptar</a>
+                                    <a href="{% url 'gestionar_intercambio' intercambio.id 'rechazar' %}" class="btn btn-sm btn-danger">Rechazar</a>
+                                </div>
+                            {% endif %}
+                        </td>
+                        <td>{{ intercambio.fecha_solicitud|date:"d/m/Y H:i" }}</td>
+                        <td>
+                            {# Si el intercambio está en estado aceptado o completado, permitir gestionar envío #}
+                            {% if intercambio.estado == 'aceptado' or intercambio.estado == 'completado' %}
+                                {% with envio=envios|dict_get:intercambio.id %}
+                                    <a href="{% url 'gestionar_envio' intercambio.id %}" class="btn btn-sm btn-info">
+                                        {% if envio and envio.recibido %}
+                                            Ver Envío
+                                        {% else %}
+                                            Gestionar Envío
+                                        {% endif %}
+                                    </a>
+                                {% endwith %}
+                            {% endif %}
+                        </td>
+                        <td>{{ intercambio.mensaje }}</td>  <!-- Muestra el mensaje que dejó el solicitante -->
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <!-- Mensaje si no hay solicitudes en sus libros -->
+        <p>No tienes solicitudes de intercambio en tus libros.</p>
+    {% endif %}
+</div>
+{% endblock %}
+
+{# Fin de la plantilla 'mis_intercambios.html'. Esta vista muestra al usuario los intercambios realizados y recibidos con acciones relevantes. #}

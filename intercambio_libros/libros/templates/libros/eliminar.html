@@ -1,0 +1,32 @@
+{#
+    Plantilla: eliminar_libro.html
+    Descripción: Página de confirmación para eliminar un libro específico.
+    Muestra el título del libro y un formulario para confirmar o cancelar la eliminación.
+#}
+
+{% extends 'base.html' %}  {# Hereda la estructura y diseño de la plantilla base #}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Eliminar Libro</h2>
+
+    {# Mensaje de confirmación con el título del libro a eliminar #}
+    <p>¿Estás seguro de que deseas eliminar el libro <strong>{{ libro.titulo }}</strong>?</p>
+
+    {# Formulario para confirmar la eliminación del libro #}
+    <form method="post">
+        {% csrf_token %}  {# Token de seguridad contra ataques CSRF #}
+
+        {# Botón para cancelar la acción y volver a la lista de libros del usuario #}
+        <a href="{% url 'mis_libros' %}" class="btn btn-secondary">Cancelar</a>
+
+        {# Botón para confirmar la eliminación del libro #}
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+    </form>
+</div>
+{% endblock %}
+
+{# 
+    Fin de la plantilla eliminar_libro.html.
+    Esta página se utiliza para confirmar si el usuario desea eliminar un libro.
+#}

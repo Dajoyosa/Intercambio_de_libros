@@ -1,0 +1,40 @@
+{# 
+    Plantilla: agregar_libro.html
+    Descripción: Permite al usuario agregar un nuevo libro al sistema.
+    El formulario se renderiza automáticamente con los campos definidos en el formulario Django (forms.py).
+#}
+
+{% extends 'base.html' %}  {# Hereda la estructura base común del sitio (encabezado, pie de página, etc.) #}
+
+{% block title %}Agregar Libro{% endblock %}  {# Define el título de la pestaña del navegador #}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Agregar Nuevo Libro</h2>
+
+    {# Muestra los mensajes de éxito o error que Django almacena con el framework de mensajes #}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    {# 
+        Formulario para agregar un libro.
+        - method="post": envía los datos mediante POST.
+        - enctype="multipart/form-data": necesario para subir archivos (como imágenes).
+        - class="needs-validation" y novalidate: usado para aplicar validaciones personalizadas si se desea.
+    #}
+    <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+        {% csrf_token %}  {# Token de seguridad contra ataques CSRF #}
+        {{ form.as_p }}   {# Renderiza el formulario con los campos en formato de párrafos <p> #}
+        <button type="submit" class="btn btn-primary mt-3">Guardar Libro</button>
+    </form>
+</div>
+{% endblock %}
+
+{# 
+    Fin de la plantilla 'agregar_libro.html'.
+    Esta vista permite al usuario subir la información de un nuevo libro, incluyendo archivo (imagen de portada).
+#}
+
