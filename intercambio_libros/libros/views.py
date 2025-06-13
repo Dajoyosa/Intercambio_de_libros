@@ -5,7 +5,6 @@ from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.utils import timezone
-
 from .models import Libro, Intercambio, Comentario, Usuario, Envio
 from .forms import EnvioForm, RegistroForm, LibroForm, IntercambioForm, ComentarioForm
 
@@ -231,7 +230,6 @@ def gestionar_envio(request, intercambio_id):
     envio, creado = Envio.objects.get_or_create(intercambio=intercambio)
 
     if request.method == 'POST':
-        # Marcar como recibido (solicitante)
         if 'marcar_recibido' in request.POST:
             if request.user == intercambio.solicitante:
                 envio.recibido = True
